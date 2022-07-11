@@ -8,18 +8,27 @@ import "primeicons/primeicons.css";
 import {Menubar} from 'primereact/menubar';
 import { InputText } from 'primereact/inputtext';
 // imagens e conteudo da pagina
-import vestibular from './images/Enem.jpg'
-import superior from './images/superio.jpg'
-import tecnico from './images/tec.jpeg'
 import logo from './logo.svg'
 // estilizacao
 import './App.css'; 
+// Hook global
+import { AuthProvider } from './contexts/auth'
+// contexto para o signin
+import UseAuth from './hooks/useAuth'
+// importando as paginas
+import Login from './pages/login/Login'
+import Registrar from './pages/registrar/Registrar'
+import Home from './pages/home/Home'
 
 const Private = ({ Item }) => {
-  const signed = false;
-
-  return signed > 0 ? <Item /> : <Login />;
+  const { signed } = UseAuth();
+  if (signed > 0) {
+    return <Item/>
+  } else {
+    return <Login/>
+  }
 }
+ 
 class App extends Component {
   render () {
     const items = [
@@ -49,10 +58,17 @@ class App extends Component {
        label:'Login',
        icon:'pi pi-fw pi-user',
        url: '/Login'
+     },
+     {
+      label: 'Logout',
+      disabled: false,
+      comand: () => { const { signout } = UseAuth(); signout() },
+      url: '/Login'
      }
     ]
     return (
-      <Router>
+      <AuthProvider>
+        <Router>
           <Menubar 
           model={items}
           start={<img className="App-logo" src={logo} alt="logo"></img>}
@@ -64,45 +80,16 @@ class App extends Component {
             <Route exact path="/Editais" element={  <Editais />}/>
             <Route exact path="/Feed" element={  <Feed />}/>
             <Route exact path="/Login" element={  <Login />}/>
+            <Route exact path="/registrar" element={  <Registrar />}/>
           </Routes>
       </Router>
+      </AuthProvider>
     );
   }
 
 }
 
 export default App;
-
-function Home() {
-  return (
-    <div>
-      <main className="App">
-              <h1>
-                Categorias
-              </h1>
-            <div className="images">
-              <a href="./"><img src={vestibular} alt="vestibulares"></img></a>
-              <a href="./"><img src={superior} alt="superior"></img></a>
-              <a href="./"><img src={tecnico} alt="tecnologia"></img></a>
-            </div>
-        </main>
-        <footer>
-        <a href="./">
-           <img className="App-logo" src={logo} alt="logo"></img>
-          </a>
-          <div>
-            <a href="./"><h3>SOBRE</h3></a>
-          </div>
-          <div>
-            <h3>Email:dabm@discente.ifpe.edu.br</h3>
-          </div>
-          <div>
-            <h3>Politica de privacidade</h3>
-          </div>
-        </footer>
-    </div>
-  );
-}
 
 function Sobre() {
   return (
@@ -116,14 +103,6 @@ function Editais() {
   return (
     <div>
       <h2>Editais</h2>
-    </div>
-  );
-}
-
-function Login() {
-  return (
-    <div>
-      <h2>Login</h2>
     </div>
   );
 }
