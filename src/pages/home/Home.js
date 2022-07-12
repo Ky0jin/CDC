@@ -11,9 +11,9 @@ const Home = () => {
                   Categorias
                 </h1>
               <div className="images">
-                <a href="./"><img src={vestibular} alt="vestibulares"></img></a>
-                <a href="./"><img src={superior} alt="superior"></img></a>
-                <a href="./"><img src={tecnico} alt="tecnologia"></img></a>
+                <a href="/vestibulares"><img src={vestibular} alt="vestibulares"></img></a>
+                <a href="/superior"><img src={superior} alt="superior"></img></a>
+                <a href="/tecnologia"><img src={tecnico} alt="tecnologia"></img></a>
               </div>
           </main>
           <footer>
